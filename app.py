@@ -2,12 +2,10 @@ import streamlit as st
 from user import user1
 from budget import budget
 # -----------# APP #------------
-st.set_page_config(page_title="Personal Budget")
-st.set_page_config(page_icon=r"C:\Users\USER\OneDrive - just.edu.jo\Desktop\SDK Final Project\icon.jpg",layout="centered")
-
+st.set_page_config(page_title="Personal Budget", page_icon="icon.jpg", layout="centered")
 
 import base64
-video_path = r"C:\Users\USER\OneDrive - just.edu.jo\Desktop\SDK Final Project\Budget.mp4"
+video_path =video_path = "Budget.mp4"
 with open(video_path, "rb") as video_file:
     video_bytes = video_file.read()
 
@@ -54,7 +52,7 @@ label {
 
 
 st.title("Welcome to Your Budget Calculator                                   😊💸 ")
-st.image(r"C:\Users\USER\OneDrive - just.edu.jo\Desktop\SDK Final Project\Money Business GIF by JustStartInvesting.gif")
+st.image("Money Business GIF by JustStartInvesting.gif")
 # -----------#Session_stat#------------
 if "page" not in st.session_state :
     st.session_state.page="login"
