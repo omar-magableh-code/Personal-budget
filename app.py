@@ -1,6 +1,7 @@
 import streamlit as st
 from user import user1
 from budget import budget
+import pandas as pd
 # -----------# APP #------------
 st.set_page_config(page_title="Personal Budget", page_icon="icon.jpg", layout="centered")
 
@@ -134,6 +135,16 @@ if st.session_state.page == "Expense_account":
       if st.button("Calculate 💰"):
          total = budget.remaining_salary_p()
          st.success(f"remaining salary persone = {total} JD.")
+         if total < 0:
+                st.error("⚠️Warning: Your personal expenses exceed your total income!")
+         else:
+            st.success("✅Great! Your personal budget is safe.")
+         data = {
+            'Category': ['Apartment', 'Clothes', 'Transport', 'Travel'],
+            'Cost': [apartment, clothes, car + public_transportation, travel if isinstance(travel, (int, float)) else 0]
+        }
+         df = pd.DataFrame(data)
+         st.bar_chart(df.set_index('Category'))   
 
    else:
        school_installments=st.number_input("How much do you spend on school installments ?",max_value=850,min_value=0)
@@ -143,3 +154,16 @@ if st.session_state.page == "Expense_account":
        if st.button("Calculate 💰"):
                 total = budget.remaining_salary_f()
                 st.success(f"remaining salary family = {total} JD.")
+                if total < 0:
+                   st.error("⚠️Warning: Your Family expenses exceed your total income!")
+                else:
+                  st.success("✅Great! Your Family budget is safe.")       
+
+                family_data = {
+                'Category': ['School', 'University', 'Home Bills'],
+                'Cost': [school_installments, university_fees, home_bills]
+            }
+                df_family = pd.DataFrame(family_data)
+                st.bar_chart(df_family.set_index('Category'))
+
+
