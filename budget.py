@@ -31,12 +31,12 @@ class Budget :
          return self.__family
  
     def remaining_salary_p(self) :
-         self.__remainder=self.cal_increase - self.__personalsp
+         self.__remainder=self.__cal_increase - self.__personalsp
          return self.__remainder
 
 
     def  remaining_salary_f(self):
-         self.__remainderf= self.cal_increase - self.__family
+         self.__remainderf= self.__cal_increase - self.__family
          return self.__remainderf
 
 budget = Budget()
