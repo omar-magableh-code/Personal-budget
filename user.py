@@ -17,7 +17,7 @@ class User :
             self.__attemps=0
             return "Wait 5 Seconde. "
         
-        if self.__username==username and self._password==password:
+        if self.__username==username and self.__password==password:
             return f"Welcome {self.__username} !"
         
         self.__attemps +=1
