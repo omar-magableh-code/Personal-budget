@@ -135,7 +135,7 @@ if st.session_state.page == "Expense_account":
       if st.button("Calculate 💰"):
          total = budget.remaining_salary_p()
          st.success(f"remaining salary persone = {total} JD.")
-         if total < 0:
+         if total <= 0:
                 st.error("⚠️Warning: Your personal expenses exceed your total income!")
          else:
             st.success("✅Great! Your personal budget is safe.")
@@ -154,7 +154,7 @@ if st.session_state.page == "Expense_account":
        if st.button("Calculate 💰"):
                 total = budget.remaining_salary_f()
                 st.success(f"remaining salary family = {total} JD.")
-                if total < 0:
+                if total <= 0:
                    st.error("⚠️Warning: Your Family expenses exceed your total income!")
                 else:
                   st.success("✅Great! Your Family budget is safe.")       
