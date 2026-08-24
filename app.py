@@ -155,7 +155,7 @@ if st.session_state.page == "Expense_account":
          st.session_state.total_salary = total
           
          st.success(f"remaining salary persone = {total} JD.")
-         if total <= (st.session_state.total_salary  * 0.15):
+         if total <= (st.session_state.total_salary  * 0.25):
                 st.error("⚠️ Warning: Your personal expenses exceed your total income!")
          else:
             st.success("✅Great! Your personal budget is safe.")
@@ -179,7 +179,7 @@ if st.session_state.page == "Expense_account":
                 st.session_state.total_salary = total
            
                 st.success(f"remaining salary family = {total} JD.")
-                if total <= (st.session_state.total_salary  * 0.15):
+                if total <= (st.session_state.total_salary  *  0.25):
                    st.error("⚠️ Warning: Your Family expenses exceed your total income!")
                 else:
                   st.success("✅Great! Your Family budget is safe.")       
