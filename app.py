@@ -190,6 +190,8 @@ if st.session_state.page == "Expense_account":
                         }
            
                 df_family = pd.DataFrame(family_data)
+
+                
                 st.bar_chart(df_family.set_index('Category'))
 
 
