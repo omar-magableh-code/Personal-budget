@@ -106,6 +106,7 @@ if st.session_state.page == "budget":
     increase=st.number_input("Enter Your Increase : ",min_value=0,max_value=20000)
     if st.button("Calculate 💰"):
         total = budget.cal_increase(salary, increase)
+        st.session_state.salary = total
         st.success(f"Total Salary = {total} JD.")
     if st.button("Go To Expenses ➡️"):
         st.session_state.page = "Expense_account"
@@ -134,6 +135,7 @@ if st.session_state.page == "Expense_account":
       personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)   
       if st.button("Calculate 💰"):
          total = budget.remaining_salary_p()
+         st.session_state.salary = total
          st.success(f"remaining salary persone = {total} JD.")
          if total <= (salary * 0.20):
                 st.error("⚠️Warning: Your personal expenses exceed your total income!")
@@ -153,6 +155,7 @@ if st.session_state.page == "Expense_account":
        family=budget.family_Expense(school_installments,university_fees,home_bills)
        if st.button("Calculate 💰"):
                 total = budget.remaining_salary_f()
+                st.session_state.salary = total
                 st.success(f"remaining salary family = {total} JD.")
                 if total <= (salary * 0.20):
                    st.error("⚠️Warning: Your Family expenses exceed your total income!")
