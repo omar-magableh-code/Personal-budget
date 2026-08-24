@@ -116,21 +116,21 @@ if st.session_state.page == "Expense_account":
    st.subheader("Expense Account 🎯💵")
    if st.session_state.status=="Single":
       apartment=st.number_input("Enter how much spend to apartment ",max_value=1700,min_value=100)
-      clothes=st.number_input("Enter how much spend to buy new clothes ",max_value=900)
+      clothes=st.number_input("Enter how much spend to buy new clothes ",max_value=900,min_value=0)
       car = 0
       public_transportation = 0
 
       transpotation=st.radio("Do you own a car or not ?",["Yes","No"])
 
       if transpotation == "Yes":
-         car=st.number_input("how much you spend to your car monthly",max_value=300)
+         car=st.number_input("how much you spend to your car monthly",max_value=400,min_value=0)
 
       else:
-          public_transportation=st.number_input("Enter how much spend to public transportation ",max_value=100)
+          public_transportation=st.number_input("Enter how much spend to public transportation ",max_value=100,min_value=0)
       travel=0
       travel=st.radio("Do you travel monthly?",["Yes","No"])
       if travel == "Yes" :
-        travel=st.number_input("How much do you spend on personal travel ?")
+        travel=st.number_input("How much do you spend on personal travel ?",min_value=0,max_value=2000)
       personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)   
       if st.button("Calculate 💰"):
          total = budget.remaining_salary_p()
@@ -143,13 +143,13 @@ if st.session_state.page == "Expense_account":
             'Category': ['Apartment', 'Clothes', 'Transport', 'Travel'],
             'Cost': [apartment, clothes, car + public_transportation, travel if isinstance(travel, (int, float)) else 0]
         }
-         df = pd.DataFrame(data)
+         df= pd.DataFrame(data)
          st.bar_chart(df.set_index('Category'))   
 
    else:
        school_installments=st.number_input("How much do you spend on school installments ?",max_value=850,min_value=0)
        university_fees=st.number_input("How much do you spend on university fees ?",max_value=850,min_value=0)
-       home_bills=st.number_input("How much do you spend on the house (electricity, water, air conditioning, internet) ?",max_value=450)
+       home_bills=st.number_input("How much do you spend on the house (electricity, water, air conditioning, internet) ?",max_value=800,min_value=0)
        family=budget.family_Expense(school_installments,university_fees,home_bills)
        if st.button("Calculate 💰"):
                 total = budget.remaining_salary_f()
