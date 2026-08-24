@@ -128,14 +128,14 @@ if st.session_state.page == "Expense_account":
       else:
           public_transportation=st.number_input("Enter how much spend to public transportation ",max_value=100,min_value=0)
       travel=0
-      travel=st.radio("Do you travel monthly?",["Yes","No"])
-      if travel == "Yes" :
+      travel=st.radio("Do you travel monthly?",[True,False])
+      if travel == True :
         travel=st.number_input("How much do you spend on personal travel ?",min_value=0,max_value=2000)
       personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)   
       if st.button("Calculate 💰"):
          total = budget.remaining_salary_p()
          st.success(f"remaining salary persone = {total} JD.")
-         if total <= salary * 0.20:
+         if total <= (salary * 0.20):
                 st.error("⚠️Warning: Your personal expenses exceed your total income!")
          else:
             st.success("✅Great! Your personal budget is safe.")
@@ -154,7 +154,7 @@ if st.session_state.page == "Expense_account":
        if st.button("Calculate 💰"):
                 total = budget.remaining_salary_f()
                 st.success(f"remaining salary family = {total} JD.")
-                if total <= salary * 0.20:
+                if total <= (salary * 0.20):
                    st.error("⚠️Warning: Your Family expenses exceed your total income!")
                 else:
                   st.success("✅Great! Your Family budget is safe.")       
