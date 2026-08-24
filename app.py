@@ -3,7 +3,7 @@ from user import user1
 from budget import budget
 import pandas as pd
 # -----------# APP #------------
-st.set_page_config(page_title="Personal Budget", page_icon="icon.jpg", layout="centered")
+st.set_page_config(page_title="Personal Budget", page_icon="icon.jpg", layout="wide")
 
 import base64
 video_path =video_path = "Budget.mp4"
@@ -58,7 +58,7 @@ st.image("Money Business GIF by JustStartInvesting.gif")
 if "page" not in st.session_state :
     st.session_state.page="login"
 # -----------#Login #------------
-if st.session_state.page == "login":
+if st.session_state.page =="login":
     st.subheader("login🔐")
 
     username=st.text_input("Enter Your Name : ",max_chars=10, key="login_username")
@@ -70,7 +70,7 @@ if st.session_state.page == "login":
         st.session_state.page = "info"
         st.rerun()
        else :
-           st.error("We Can't Faound your account, Creat a New account ➕👤 ") 
+           st.error("We Can't Faound your account,Creat a New account ➕👤 ") 
 
     if st.button("Sign Up ➕👤"):
         st.session_state.page = "signup"
@@ -89,11 +89,11 @@ if st.session_state.page == "signup":
 
 # -----------#P-Info#------------
 if st.session_state.page=="info":
-    st.subheader("Personal Information.")
+    st.subheader("Personal Information💁‍♂️🙆‍♂️.")
     age=st.slider("Enter Your Age : ",min_value=18,max_value=100,value=18)
     status=st.radio("Marital Status",["Single","Married"])
     gender=st.selectbox("What Your Gender ? ",[" ","Male","Female"])
-    if st.button("Go To Expenses ➡️"):
+    if st.button("Next ➡️"):
      st.session_state.age=age
      st.session_state.status=status
      st.session_state.gender=gender
@@ -107,7 +107,7 @@ if st.session_state.page == "budget":
     if st.button("Calculate 💰"):
         total = budget.cal_increase(salary, increase)
         st.success(f"Total Salary = {total} JD.")
-if st.button("Next ➡️"):
+    if st.button("Go To Expenses ➡️"):
         st.session_state.page = "Expense_account"
         st.rerun()
 
@@ -115,7 +115,7 @@ if st.button("Next ➡️"):
 if st.session_state.page == "Expense_account":
    st.subheader("Expense Account 🎯💵")
    if st.session_state.status=="Single":
-      apartment=st.number_input("Enter how much spend to apartment ",max_value=900,min_value=500)
+      apartment=st.number_input("Enter how much spend to apartment ",max_value=1700,min_value=100)
       clothes=st.number_input("Enter how much spend to buy new clothes ",max_value=900)
       car = 0
       public_transportation = 0
