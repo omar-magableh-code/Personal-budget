@@ -105,12 +105,16 @@ if st.session_state.page == "budget":
     salary=st.number_input("Enter Your Salary : ",max_value=20000,min_value=0) 
     increase=st.number_input("Enter Your Increase : ",min_value=0,max_value=20000)
     if st.button("Calculate 💰"):
-        total = budget.cal_increase(salary, increase)
+        total = budget.cal_increase(salary,increase)
         st.session_state.salary = total
         st.success(f"Total Salary = {total} JD.")
+
     if st.button("Go To Expenses ➡️"):
-        st.session_state.page = "Expense_account"
-        st.rerun()
+       if "salary" not in st.session_state:
+         st.error("Please calculate your salary first.")
+       else:
+         st.session_state.page = "Expense_account"
+         st.rerun()
 
 # -----------#Expense_account#------------
 if st.session_state.page == "Expense_account":
@@ -128,45 +132,53 @@ if st.session_state.page == "Expense_account":
 
       else:
           public_transportation=st.number_input("Enter how much spend to public transportation ",max_value=100,min_value=0)
-      travel=0
-      travel=st.radio("Do you travel monthly?",[True,False])
-      if travel == True :
-        travel=st.number_input("How much do you spend on personal travel ?",min_value=0,max_value=2000)
-      personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)   
-      if st.button("Calculate 💰"):
-         total = budget.remaining_salary_p()
-         st.session_state.salary = total
-         st.success(f"remaining salary persone = {total} JD.")
-         if total <= (salary * 0.20):
-                st.error("⚠️Warning: Your personal expenses exceed your total income!")
-         else:
+
+travel = 0
+travel_option = st.radio("Do you travel monthly?", ["Yes", "No"])
+
+if travel_option == "Yes":
+    travel = st.number_input(
+        "How much do you spend on personal travel ?",
+        min_value=0,
+        max_value=2000
+    )
+personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)   
+if st.button("Calculate 💰"):
+        total = budget.remaining_salary_p()
+        st.session_state.salary = total
+        st.success(f"remaining salary persone = {total} JD.")
+        if total <= (st.session_state.salary * 0.20):
+            st.error("⚠️ Warning: Your remaining salary is less than 20% of your total income!")
+
+        else:
             st.success("✅Great! Your personal budget is safe.")
-         data = {
+
+        data = {
             'Category': ['Apartment', 'Clothes', 'Transport', 'Travel'],
             'Cost': [apartment, clothes, car + public_transportation, travel if isinstance(travel, (int, float)) else 0]
         }
-         df= pd.DataFrame(data)
-         st.bar_chart(df.set_index('Category'))   
+        df= pd.DataFrame(data)
+        st.bar_chart(df.set_index('Category'))   
 
-   else:
-       school_installments=st.number_input("How much do you spend on school installments ?",max_value=850,min_value=0)
-       university_fees=st.number_input("How much do you spend on university fees ?",max_value=850,min_value=0)
-       home_bills=st.number_input("How much do you spend on the house (electricity, water, air conditioning, internet) ?",max_value=800,min_value=0)
-       family=budget.family_Expense(school_installments,university_fees,home_bills)
-       if st.button("Calculate 💰"):
-                total = budget.remaining_salary_f()
-                st.session_state.salary = total
-                st.success(f"remaining salary family = {total} JD.")
-                if total <= (salary * 0.20):
-                   st.error("⚠️Warning: Your Family expenses exceed your total income!")
-                else:
-                  st.success("✅Great! Your Family budget is safe.")       
+else:
+    school_installments=st.number_input("How much do you spend on school installments ?",max_value=850,min_value=0)
+    university_fees=st.number_input("How much do you spend on university fees ?",max_value=850,min_value=0)
+    home_bills=st.number_input("How much do you spend on the house (electricity, water, air conditioning, internet) ?",max_value=800,min_value=0)
+    family=budget.family_Expense(school_installments,university_fees,home_bills)
+    if st.button("Calculate 💰"):
+        total = budget.remaining_salary_f()
+        st.session_state.salary = total
+        st.success(f"remaining salary family = {total} JD.")
+        if total <= (st.session_state.salary * 0.20):
+            st.error("⚠️ Warning: Your remaining salary is less than 20% of your total income!")
+        else:
+            st.success("✅Great! Your Family budget is safe.")       
 
-                family_data = {
-                'Category': ['School', 'University', 'Home Bills'],
-                'Cost': [school_installments, university_fees, home_bills]
+        family_data = {
+            'Category': ['School', 'University', 'Home Bills'],
+            'Cost': [school_installments, university_fees, home_bills]
             }
-                df_family = pd.DataFrame(family_data)
-                st.bar_chart(df_family.set_index('Category'))
+        df_family = pd.DataFrame(family_data)
+        st.bar_chart(df_family.set_index('Category'))
 
 
