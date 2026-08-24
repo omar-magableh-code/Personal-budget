@@ -179,12 +179,12 @@ if st.session_state.page == "Expense_account":
         else:
            st.success("✅Great! Your personal budget is safe.")
              
-        data = {
+       data = {
            'Category': ['Apartment', 'Clothes', 'Transport', 'Travel'],
            'Cost': [apartment, clothes, car + public_transportation, travel_cost]
             }
-        df= pd.DataFrame(data)
-        st.bar_chart(df.set_index('Category'))   
+       df= pd.DataFrame(data)
+       st.bar_chart(df.set_index('Category'))   
 
 
 else:
