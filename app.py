@@ -6,12 +6,11 @@ import pandas as pd
 st.set_page_config(page_title="Personal Budget", page_icon="icon.jpg", layout="wide")
 
 import base64
-video_path =video_path = "Budget.mp4"
+video_path = "Budget.mp4"
 with open(video_path, "rb") as video_file:
     video_bytes = video_file.read()
 
 video_base64 = base64.b64encode(video_bytes).decode()
-
 st.markdown(
     f"""
     <style>
@@ -31,7 +30,6 @@ st.markdown(
         object-fit: cover;
     }}
     </style>
-
     <video autoplay loop muted>
         <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
     </video>
@@ -39,7 +37,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 
 st.markdown("""
 <style>
@@ -54,9 +51,23 @@ label {
 
 st.title("Welcome to Your Budget Calculator                                   😊💸 ")
 st.image("Money Business GIF by JustStartInvesting.gif")
+
 # -----------#Session_stat#------------
-if "page" not in st.session_state :
+if "page" not in st.session_state:
     st.session_state.page="login"
+
+if "age" not in st.session_state:
+    st.session_state.age=0
+
+if "status" not in st.session_state:
+    st.session_state.status=""
+
+if "gender" not in st.session_state:
+    st.session_state.gender=""
+
+if "total_salary" not in st.session_state:
+    st.session_state.total_salary=0
+
 # -----------#Login #------------
 if st.session_state.page =="login":
     st.subheader("login🔐")
@@ -65,16 +76,19 @@ if st.session_state.page =="login":
     password=st.text_input("Enter Your Password : ",type="password",max_chars=12,key="login_password")
 
     if st.button("login🔐") :
-       result=user1.login(username,password)   
+       result=user1.login(username,password) 
+
        if "Welcome" in result :
         st.session_state.page = "info"
         st.rerun()
+
        else :
            st.error("We Can't Faound your account,Creat a New account ➕👤 ") 
 
     if st.button("Sign Up ➕👤"):
         st.session_state.page = "signup"
         st.rerun() 
+
 # -----------#Sgin Up#------------
 if st.session_state.page == "signup":
    st.subheader("Create New Account 👤➕")
@@ -91,7 +105,7 @@ if st.session_state.page == "signup":
 
 # -----------#P-Info#------------
 if st.session_state.page=="info":
-    st.subheader("Personal Information💁‍♂️🙆‍♂️.")
+    st.subheader("Personal Information 💁‍♂️🙆‍♂️.")
     
     age=st.slider("Enter Your Age : ",min_value=18,max_value=100,value=18)
     
@@ -103,10 +117,11 @@ if st.session_state.page=="info":
      st.session_state.age=age
      st.session_state.status=status
      st.session_state.gender=gender
-     st.session_state.page = "budget"
+     st.session_state.page="budget"
      st.rerun()
+
 # -----------#budget#------------
-if st.session_state.page == "budget":
+if st.session_state.page=="budget":
     st.subheader("Calculate Salary💸")
     
     salary=st.number_input("Enter Your Salary : ",max_value=20000,min_value=0) 
@@ -118,10 +133,14 @@ if st.session_state.page == "budget":
         st.success(f"Total Salary = {total} JD.")
         
     if st.button("Go To Expenses ➡️"):
-        st.session_state.page = "Expense_account"
-        st.rerun()
+        if st.session_state.total_salary > 0:
+            st.session_state.page = "Expense_account"
+            st.rerun()
+        else:
+            st.error("⚠️ Please calculate your total salary first.")
 
 # -----------#Expense_account#------------
+
 if st.session_state.page == "Expense_account":
    st.subheader("Expense Account 🎯💵")
     
@@ -141,46 +160,50 @@ if st.session_state.page == "Expense_account":
       else:
           public_transportation=st.number_input("Enter how much spend to public transportation ",max_value=100,min_value=0)
           
-      travel=0
       travel=st.radio("Do you travel monthly?",[True,False])
+
+      travel_cost = 0
        
       if travel == True :
-        travel=st.number_input("How much do you spend on personal travel ?",min_value=0,max_value=8000)
+        travel_cost=st.number_input("How much do you spend on personal travel ?",min_value=0,max_value=8000)
           
-      personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)
+      personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel_cost)
        
       if st.button("Calculate 💰"):
-         total = budget.remaining_salary_p()
           
-         st.session_state.total_salary = total
+         total = st.session_state.total_salary - personal
           
          st.success(f"remaining salary persone = {total} JD.")
-         if total <= (st.session_state.total_salary  * 0.25):
-                st.error("⚠️ Warning: Your personal expenses exceed your total income!")
+
+         if personal >= (st.session_state.total_salary * 0.25):
+                st.error("⚠️ Warning: Your personal expenses exceed 25% of your total income!")
          else:
             st.success("✅Great! Your personal budget is safe.")
              
          data = {
             'Category': ['Apartment', 'Clothes', 'Transport', 'Travel'],
-            'Cost': [apartment, clothes, car + public_transportation, travel if isinstance(travel, (int, float)) else 0]
+            'Cost': [apartment, clothes, car + public_transportation, travel_cost]
                  }
+
          df= pd.DataFrame(data)
          st.bar_chart(df.set_index('Category'))   
+
 
    else:
        school_installments=st.number_input("How much do you spend on school installments ?",max_value=850,min_value=0)
        university_fees=st.number_input("How much do you spend on university fees ?",max_value=850,min_value=0)
        home_bills=st.number_input("How much do you spend on the house (electricity, water, air conditioning, internet) ?",max_value=800,min_value=0)
+
        family=budget.family_Expense(school_installments,university_fees,home_bills)
        
        if st.button("Calculate 💰"):
-                total = budget.remaining_salary_f()
-           
-                st.session_state.total_salary = total
+
+                total = st.session_state.total_salary - family
            
                 st.success(f"remaining salary family = {total} JD.")
-                if total <= (st.session_state.total_salary  *  0.25):
-                   st.error("⚠️ Warning: Your Family expenses exceed your total income!")
+
+                if family >= (st.session_state.total_salary * 0.25):
+                   st.error("⚠️ Warning: Your Family expenses exceed 25% of your total income!")
                 else:
                   st.success("✅Great! Your Family budget is safe.")       
 
@@ -192,5 +215,3 @@ if st.session_state.page == "Expense_account":
                 df_family = pd.DataFrame(family_data)
 
                 st.bar_chart(df_family.set_index('Category'))
-
-
