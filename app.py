@@ -120,7 +120,7 @@ if st.session_state.page == "Expense_account":
       car = 0
       public_transportation = 0
 
-      transpotation=st.select_slider("Do you own a car or not ?",[True,False])
+      transpotation=st.radio("Do you own a car or not ?",[True,False])
 
       if transpotation == True:
          car=st.number_input("how much you spend to your car monthly",max_value=300)
@@ -128,7 +128,7 @@ if st.session_state.page == "Expense_account":
       else:
           public_transportation=st.number_input("Enter how much spend to public transportation ",max_value=100)
       travel=0
-      travel=st.select_slider("Do you travel monthly",[True,False])
+      travel=st.radio("Do you travel monthly?",[True,False])
       if travel == True :
         travel=st.number_input("How much do you spend on personal travel ?")
       personal=budget.Personal_Expense(apartment,clothes,public_transportation,car,travel)   
